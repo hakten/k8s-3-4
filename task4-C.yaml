@@ -1,0 +1,26 @@
+#kubectl create secret docker-registry mydocker --docker-username=<username> --docker-password=<password> --docker-email=<email>
+#run this command before with your credentials inserted and change your private repo and image name below
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: rs-docker-ubuntu
+  labels:
+    app: ubuntu
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ubuntu
+  template:
+    metadata:
+      labels:
+        app: ubuntu
+    spec:
+      imagePullSecrets:
+      - name: mydocker
+      containers:
+      - name: ubuntu-cont
+        image: hakten/ubuntu:v1
+        tty: true
+        stdin: true
